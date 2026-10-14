@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emelio Exaudi — Data Analyst</title>
+<meta name="description" content="Portfolio of Emelio Exaudi, a data analyst based in Bogor, Indonesia. Dashboards, analysis and statistical models with Python, SQL, Tableau and Power BI.">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="is-loading">
+
+<!-- preloader -->
+<div class="loader" aria-hidden="true">
+  <i class="hud-corner tl"></i><i class="hud-corner tr"></i><i class="hud-corner bl"></i><i class="hud-corner br"></i>
+  <span class="loader-pct mono">0%</span>
+</div>
+
+<!-- background grid + fixed HUD -->
+<div class="grid-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+<header class="hud">
+  <a class="hud-brand" href="#top"><span class="tri">▲</span> EMELIO EXAUDI</a>
+  <span class="hud-meta mono">BOGOR, ID<br><span id="clock">--:--</span> WIB</span>
+  <span class="hud-meta mono hide-sm">06°35'42"S<br>106°48'59"E</span>
+  <button class="menu-btn mono" aria-expanded="false" aria-controls="menu">MENU</button>
+</header>
+
+<nav id="menu" class="menu" aria-label="Main">
+  <ol>
+    <li><a href="#work"><span class="mono">01</span>Selected work</a></li>
+    <li><a href="#experience"><span class="mono">02</span>Experience</a></li>
+    <li><a href="#credentials"><span class="mono">03</span>Credentials</a></li>
+    <li><a href="hobbies.html"><span class="mono">04</span>Hobbies</a></li>
+    <li><a href="#contact"><span class="mono">05</span>Contact</a></li>
+  </ol>
+</nav>
+
+<main id="top">
+
+  <!-- 01 HERO -->
+  <section class="hero">
+    <canvas class="portrait" aria-label="Portrait of Emelio Exaudi" role="img"></canvas>
+    <div class="hero-contact mono">
+      <a href="mailto:emelioexaudi@gmail.com">EMELIOEXAUDI<br>@GMAIL.COM</a>
+    </div>
+    <span class="hero-from mono">FROM</span>
+    <span class="hero-country">ID</span>
+
+    <div class="hero-copy">
+      <p class="intro">I'm a meteorology graduate who fell for <em>data</em> and <code>&lt;insights/&gt;</code>. I build reliable dashboards and statistical models that turn messy, raw numbers into decisions people can act on.</p>
+      <span class="tag">DATA ANALYST</span>
+      <div class="hero-sub mono"><span>B.SC. METEOROLOGY</span><span>BANDUNG INSTITUTE OF TECHNOLOGY · 2022–2026</span></div>
+      <h1 class="hero-name"><span>EMELIO</span><span>EXAUDI</span></h1>
+    </div>
+    <span class="scroll-hint mono">SCROLL DOWN ⌄</span>
+  </section>
+
+  <!-- 02 STATEMENT -->
+  <section class="statement" data-scrub>
+    <p class="statement-text">I hold myself to high personal standards &amp; keep improving, one project at a time. I stay humble, listen first, and do my best work as part of a team. <span class="accent">Available now, ready to start.</span></p>
+  </section>
+
+  <!-- pixel transition black -> lime -->
+  <div class="pixels to-lime" data-pixels aria-hidden="true"></div>
+
+  <!-- 03 STATS + TOOLKIT -->
+  <section class="lime stats">
+    <div class="stat-grid">
+      <div class="tile"><span class="tile-k mono">PROJECTS SHIPPED</span><span class="tile-v" data-count="13">0</span></div>
+      <div class="tile"><span class="tile-k mono">CERTIFICATIONS</span><span class="tile-v" data-count="7">0</span></div>
+      <div class="tile"><span class="tile-k mono">INTERNSHIPS</span><span class="tile-v" data-count="2">0</span></div>
+      <div class="tile"><span class="tile-k mono">DEAN'S LIST SEM 7</span><span class="tile-v">4.00</span></div>
+    </div>
+    <p class="eyebrow mono">TOOLKIT</p>
+    <ul class="tools" id="tools"></ul>
+  </section>
+
+  <!-- 04 SELECTED WORK (horizontal) -->
+  <section class="lime work" id="work">
+    <div class="work-pin">
+      <div class="work-track" id="workTrack">
+      <div class="work-head">
+        <span class="chip mono">KEEP SCROLLING</span>
+        <h2 class="section-title">SELECTED<br>WORK</h2>
+        <p>Click any card to open the case study.</p>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="pixels to-dark" data-pixels aria-hidden="true"></div>
+
+  <!-- 05 EXPERIENCE -->
+  <section class="experience" id="experience">
+    <span class="chip mono">I'VE</span>
+    <h2 class="section-title center">WORKED AT</h2>
+    <div class="xp">
+      <ol class="xp-list" id="xpList"></ol>
+      <div class="xp-panel" id="xpPanel" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- 06 CREDENTIALS -->
+  <section class="credentials" id="credentials">
+    <h2 class="section-title">CREDENTIALS</h2>
+    <ul class="certs" id="certs"></ul>
+  </section>
+
+</main>
+
+<!-- 07 CONTACT -->
+<footer class="lime contact" id="contact">
+  <div class="contact-top">
+    <div>
+      <h2 class="contact-title">LET'S TURN<br>DATA INTO<br>DECISIONS</h2>
+      <div class="btns">
+        <a class="btn" href="mailto:emelioexaudi@gmail.com">SHOOT A MESSAGE ↗</a>
+        <a class="btn" href="https://framerusercontent.com/assets/147DXCGfv86VcyDUHwmPobr3no4.pdf" target="_blank" rel="noopener">DOWNLOAD CV ↓</a>
+      </div>
+    </div>
+    <dl class="links mono">
+      <dt>WORK</dt><dd><a href="https://github.com/pedacitodecielo-lab" target="_blank" rel="noopener">GITHUB ↗</a><a href="https://public.tableau.com/app/profile/emelio.exaudi" target="_blank" rel="noopener">TABLEAU ↗</a></dd>
+      <dt>SOCIAL</dt><dd><a href="https://www.linkedin.com/in/emelio-exaudi" target="_blank" rel="noopener">LINKEDIN ↗</a><a href="https://open.spotify.com/user/21xx54fhyxwllmnkvf6cjgzui" target="_blank" rel="noopener">SPOTIFY ↗</a></dd>
+      <dt>ME</dt><dd><a href="hobbies.html">HOBBIES →</a><a href="geotech-demo.html">LIVE DEMO →</a></dd>
+    </dl>
+  </div>
+  <p class="mega" aria-hidden="true">PORTFOLIO/EXAUDI</p>
+  <p class="copy mono">© 2026 EMELIO JOSHIA EXAUDI LUMBAN GAOL</p>
+</footer>
+
+<!-- project modal -->
+<dialog class="modal" id="modal" aria-labelledby="mTitle">
+  <button class="modal-close mono" aria-label="Close">CLOSE ✕</button>
+  <div class="modal-body">
+    <span class="chip mono" id="mCat"></span>
+    <h3 id="mTitle"></h3>
+    <p class="m-sum" id="mSum"></p>
+    <div class="slider">
+      <button class="sl-prev" aria-label="Previous image">‹</button>
+      <div class="slides" id="mSlides"></div>
+      <button class="sl-next" aria-label="Next image">›</button>
+    </div>
+    <dl class="m-meta mono" id="mMeta"></dl>
+    <div class="m-content" id="mContent"></div>
+  </div>
+</dialog>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
