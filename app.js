@@ -150,7 +150,7 @@
     const words = raw.split(/\s+/).filter(Boolean).map((w) => {
       const m = w.match(/^\|(\w+)\|(.*)$/);
       const [cls, t] = m ? ["w-" + m[1], m[2]] : ["", w];
-      return { cls, text: t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") };
+      return { cls, text: t ? t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "&nbsp;" }; // empty indent still needs a glyph to sit on the first line
     });
     const build = () => {
       el.innerHTML = words.map((w, i) => `<span class="sw ${w.cls}" data-i="${i}">${w.text}</span>`).join(" ");
