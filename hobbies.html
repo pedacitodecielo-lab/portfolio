@@ -11,7 +11,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
-  .hob{padding:120px var(--pad) 80px;max-width:1100px;margin:0 auto}
+  .hob{position:relative;padding:120px var(--edge) 80px;max-width:1100px;margin:0 auto}
+  .chip{display:inline-block;background:var(--green);color:var(--black);padding:.4375rem .5625rem;font-family:var(--display);font-weight:600;font-size:.75rem;letter-spacing:.0975rem;clip-path:polygon(0 4px,4px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%)}
+  .section-title{font-family:var(--display);font-weight:500;font-size:clamp(3rem,7vw,5rem);line-height:.8;letter-spacing:-.02em;text-transform:uppercase;margin:0}
+  .intro{color:var(--grey-2);line-height:1.6}
+  .hob-card .mono{font-family:var(--display);font-weight:600;font-size:.75rem;letter-spacing:.0975rem}
+  .follow{display:inline-flex;align-items:center;height:2.875rem;padding:0 1.25rem;border:.5px solid var(--stroke1);background:rgba(37,46,32,.8);color:var(--white);font-family:var(--display);font-weight:600;font-size:.875rem;text-decoration:none;text-transform:uppercase}
+  .follow:hover{background:rgb(28,45,6);color:var(--green)}
+  .hud-back{justify-self:end;grid-column:5}
   .hob .intro{max-width:620px;text-align:left;margin-top:18px}
   .hob-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin:40px 0 64px}
   .hob-card{background:var(--lime);color:var(--lime-ink);padding:22px;clip-path:polygon(0 0,80% 0,85% 7%,100% 7%,100% 100%,6% 100%,0 94%)}
@@ -23,10 +30,10 @@
 </style>
 </head>
 <body>
-<div class="grid-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<div class="grid6" aria-hidden="true" style="position:fixed"><i></i><i></i><i></i><i></i><i></i><i></i></div>
 <header class="hud">
-  <a class="hud-brand" href="index.html"><span class="tri">▲</span> EMELIO EXAUDI</a>
-  <a class="menu-btn mono" href="index.html" style="text-decoration:none">← BACK</a>
+  <a class="hud-brand" href="index.html"><svg class="tri" viewBox="0 0 14 12" aria-hidden="true"><path d="M7 0 14 12H0Z"/></svg><span>EMELIO EXAUDI</span></a>
+  <a class="menu-btn hud-back" href="index.html" style="text-decoration:none">← BACK</a>
 </header>
 <main class="hob">
   <span class="chip mono">BEYOND WORK</span>
@@ -43,7 +50,7 @@
   <h2 class="section-title" style="font-size:44px">ON REPEAT</h2>
   <p class="intro">A playlist of what I have been listening to lately.</p>
   <iframe title="Spotify playlist" src="https://open.spotify.com/embed/playlist/0HSplzT1OXO97RmU3vu8ao?theme=0" width="100%" height="352" style="border:0;border-radius:12px;margin-top:18px" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
-  <a class="btn back" style="color:var(--lime-text);border-color:var(--lime-text);background:none" href="https://open.spotify.com/user/21xx54fhyxwllmnkvf6cjgzui" target="_blank" rel="noopener">FOLLOW ON SPOTIFY ↗</a>
+  <a class="follow back" href="https://open.spotify.com/user/21xx54fhyxwllmnkvf6cjgzui" target="_blank" rel="noopener">FOLLOW ON SPOTIFY ↗</a>
 </main>
 </body>
 </html>

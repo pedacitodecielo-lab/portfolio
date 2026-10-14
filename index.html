@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-preload>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,131 +8,201 @@
 <link rel="icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script>matchMedia("(prefers-reduced-motion: reduce)").matches && document.documentElement.removeAttribute("data-preload");</script>
 </head>
-<body class="is-loading">
+<body>
 
-<!-- preloader -->
-<div class="loader" aria-hidden="true">
-  <i class="hud-corner tl"></i><i class="hud-corner tr"></i><i class="hud-corner bl"></i><i class="hud-corner br"></i>
-  <span class="loader-pct mono">0%</span>
+<!-- boot cover + preloader (crosshair counter), then a pixel "vanish" canvas -->
+<div class="boot-cover" aria-hidden="true"></div>
+<div class="preloader" aria-hidden="true">
+  <span class="pl-line pl-left"></span><span class="pl-line pl-right"></span>
+  <span class="pl-line pl-top"></span><span class="pl-line pl-bottom"></span>
+  <span class="pl-pct">0%</span>
+  <svg class="pl-chamfer pl-chamfer-top" viewBox="-0.5 -0.5 140.754 21"><path d="M138.754 0L136.497 1.78418L114.997 18.7842L114.725 19H24.029L23.757 18.7842L2.257 1.78418L0 0Z"/></svg>
+  <svg class="pl-chamfer pl-chamfer-right" viewBox="-0.5 -0.5 140.754 21"><path d="M138.754 0L136.497 1.78418L114.997 18.7842L114.725 19H24.029L23.757 18.7842L2.257 1.78418L0 0Z"/></svg>
+  <svg class="pl-chamfer pl-chamfer-bottom" viewBox="-0.5 -0.5 140.754 21"><path d="M138.754 0L136.497 1.78418L114.997 18.7842L114.725 19H24.029L23.757 18.7842L2.257 1.78418L0 0Z"/></svg>
+  <svg class="pl-chamfer pl-chamfer-left" viewBox="-0.5 -0.5 140.754 21"><path d="M138.754 0L136.497 1.78418L114.997 18.7842L114.725 19H24.029L23.757 18.7842L2.257 1.78418L0 0Z"/></svg>
+  <svg class="pl-plus pl-plus-tl" viewBox="0 0 8 8"><path d="M4.5 3.5H7V4.5H4.5V7H3.5V4.5H1V3.5H3.5V1H4.5V3.5Z"/></svg>
+  <svg class="pl-plus pl-plus-tr" viewBox="0 0 8 8"><path d="M4.5 3.5H7V4.5H4.5V7H3.5V4.5H1V3.5H3.5V1H4.5V3.5Z"/></svg>
+  <svg class="pl-plus pl-plus-bl" viewBox="0 0 8 8"><path d="M4.5 3.5H7V4.5H4.5V7H3.5V4.5H1V3.5H3.5V1H4.5V3.5Z"/></svg>
+  <svg class="pl-plus pl-plus-br" viewBox="0 0 8 8"><path d="M4.5 3.5H7V4.5H4.5V7H3.5V4.5H1V3.5H3.5V1H4.5V3.5Z"/></svg>
 </div>
+<canvas class="vanish" aria-hidden="true"></canvas>
 
-<!-- background grid + fixed HUD -->
-<div class="grid-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+<!-- cursor ring that fills with scroll progress -->
+<div class="cursor-ring" aria-hidden="true"><svg viewBox="0 0 60 60" width="60" height="60" fill="none"><circle cx="30" cy="30" r="29.5" class="cr-track"/><circle cx="30" cy="30" r="29.5" class="cr-fill" transform="rotate(-90 30 30)"/></svg></div>
 
-<header class="hud">
-  <a class="hud-brand" href="#top"><span class="tri">▲</span> EMELIO EXAUDI</a>
-  <span class="hud-meta mono">BOGOR, ID<br><span id="clock">--:--</span> WIB</span>
-  <span class="hud-meta mono hide-sm">06°35'42"S<br>106°48'59"E</span>
-  <button class="menu-btn mono" aria-expanded="false" aria-controls="menu">MENU</button>
+<header class="hud" id="hud">
+  <a class="hud-brand" href="#top"><svg class="tri" viewBox="0 0 14 12" aria-hidden="true"><path d="M7 0 14 12H0Z"/></svg><span data-glitch>EMELIO EXAUDI</span></a>
+  <span class="hud-meta hide-sm">DATA · <b>ANALYST</b></span>
+  <span class="hud-meta">BOGOR, ID<br><span id="clock">--:--</span> WIB</span>
+  <span class="hud-meta hide-sm">06°35'42"S<br>106°48'59"E</span>
+  <button class="menu-btn" aria-expanded="false" aria-controls="menu"><span>MENU</span></button>
 </header>
 
-<nav id="menu" class="menu" aria-label="Main">
-  <ol>
-    <li><a href="#work"><span class="mono">01</span>Selected work</a></li>
-    <li><a href="#experience"><span class="mono">02</span>Experience</a></li>
-    <li><a href="#credentials"><span class="mono">03</span>Credentials</a></li>
-    <li><a href="hobbies.html"><span class="mono">04</span>Hobbies</a></li>
-    <li><a href="#contact"><span class="mono">05</span>Contact</a></li>
-  </ol>
-</nav>
+<div class="menu" id="menu" aria-hidden="true">
+  <div class="menu-backdrop"></div>
+  <nav class="menu-panel" aria-label="Main">
+    <ol class="menu-list">
+      <li class="menu-item"><a href="#work"><span class="mi-n">01</span><span class="mi-t">Selected work</span></a></li>
+      <li class="menu-item"><a href="#experience"><span class="mi-n">02</span><span class="mi-t">Experience</span></a></li>
+      <li class="menu-item"><a href="#credentials"><span class="mi-n">03</span><span class="mi-t">Credentials</span></a></li>
+      <li class="menu-item"><a href="hobbies.html"><span class="mi-n">04</span><span class="mi-t">Hobbies</span></a></li>
+      <li class="menu-item"><a href="#contact"><span class="mi-n">05</span><span class="mi-t">Contact</span></a></li>
+    </ol>
+    <div class="menu-links menu-reveal">
+      <a href="https://github.com/pedacitodecielo-lab" target="_blank" rel="noopener"><span data-glitch>GITHUB</span> ↗</a>
+      <a href="https://public.tableau.com/app/profile/emelio.exaudi" target="_blank" rel="noopener"><span data-glitch>TABLEAU</span> ↗</a>
+      <a href="https://www.linkedin.com/in/emelio-exaudi" target="_blank" rel="noopener"><span data-glitch>LINKEDIN</span> ↗</a>
+      <a href="https://open.spotify.com/user/21xx54fhyxwllmnkvf6cjgzui" target="_blank" rel="noopener"><span data-glitch>SPOTIFY</span> ↗</a>
+    </div>
+    <p class="menu-foot menu-reveal">©2026 BY EMELIO EXAUDI</p>
+  </nav>
+</div>
 
 <main id="top">
 
-  <!-- 01 HERO -->
-  <section class="hero">
-    <canvas class="portrait" aria-label="Portrait of Emelio Exaudi" role="img"></canvas>
-    <div class="hero-contact mono">
-      <a href="mailto:emelioexaudi@gmail.com">EMELIOEXAUDI<br>@GMAIL.COM</a>
-    </div>
-    <span class="hero-from mono">FROM</span>
-    <span class="hero-country">ID</span>
+  <!-- 01–03: one pinned stage: hero → statement → pixel reveal into stats → hand-off into the work gallery -->
+  <section class="stage" id="stage">
+    <div class="stage-view">
 
-    <div class="hero-copy">
-      <p class="intro">I'm a meteorology graduate who fell for <em>data</em> and <code>&lt;insights/&gt;</code>. I build reliable dashboards and statistical models that turn messy, raw numbers into decisions people can act on.</p>
-      <span class="tag">DATA ANALYST</span>
-      <div class="hero-sub mono"><span>B.SC. METEOROLOGY</span><span>BANDUNG INSTITUTE OF TECHNOLOGY · 2022–2026</span></div>
-      <h1 class="hero-name"><span>EMELIO</span><span>EXAUDI</span></h1>
-    </div>
-    <span class="scroll-hint mono">SCROLL DOWN ⌄</span>
-  </section>
+      <div class="hero" data-surface="dark">
+        <div class="grid6 hero-lines" aria-hidden="true"><i></i><i></i><i class="l3"></i><i></i><i></i><i></i></div>
+        <i class="notch n1" aria-hidden="true"></i><i class="notch n3" aria-hidden="true"></i><i class="notch n6" aria-hidden="true"></i>
+        <div class="portrait" data-reveal><canvas id="portrait" aria-label="Portrait of Emelio Exaudi" role="img"></canvas></div>
 
-  <!-- 02 STATEMENT -->
-  <section class="statement" data-scrub>
-    <p class="statement-text">I hold myself to high personal standards &amp; keep improving, one project at a time. I stay humble, listen first, and do my best work as part of a team. <span class="accent">Available now, ready to start.</span></p>
-  </section>
+        <div class="h-layer h-contact">
+          <span class="h-contact-bar"></span>
+          <div class="h-contact-stack split">
+            <div class="split-mask"><a class="split-inner h-row" href="mailto:emelioexaudi@gmail.com"><span>EMELIOEXAUDI</span><span>@GMAIL.COM</span></a></div>
+            <div class="split-mask"><a class="split-inner h-row" href="https://www.linkedin.com/in/emelio-exaudi" target="_blank" rel="noopener"><span>LINKEDIN</span><span>/EMELIO-EXAUDI</span></a></div>
+          </div>
+        </div>
+        <p class="h-layer h-label h-from split" data-words="from"></p>
+        <h2 class="h-layer h-heading h-id" data-scramble-exit aria-label="Indonesia">ID</h2>
+        <p class="h-layer h-intro split" data-words="|indent| I'm a meteorology graduate who fell for |art|data and |tech|&lt;insights/&gt; I build reliable dashboards and statistical models that turn messy, raw numbers into decisions people can act on."></p>
 
-  <!-- pixel transition black -> lime -->
-  <div class="pixels to-lime" data-pixels aria-hidden="true"></div>
+        <div class="h-cluster">
+          <span class="h-layer h-badge" data-reveal>DATA ANALYST</span>
+          <p class="h-layer h-label h-dad split" data-words="B.Sc. Meteorology"></p>
+          <p class="h-layer h-label h-pets split" data-words="Bandung Institute of Technology"></p>
+          <h1 class="h-layer h-heading h-first" data-scramble-exit>EMELIO</h1>
+          <h1 class="h-layer h-heading h-last" data-scramble-exit>EXAUDI</h1>
+          <p class="h-layer h-label h-age split" data-words="’26"></p>
+          <div class="h-layer h-scroll" aria-hidden="true"><span>Scroll down</span>
+            <svg viewBox="0 0 7.2 18.4" fill="currentColor"><g class="chev c1"><rect width="2.4" height="2.4" rx=".6"/><rect x="4.8" width="2.4" height="2.4" rx=".6"/><rect x="2.4" y="2.4" width="2.4" height="2.4" rx=".6"/></g><g class="chev c2" transform="translate(0 6.8)"><rect width="2.4" height="2.4" rx=".6"/><rect x="4.8" width="2.4" height="2.4" rx=".6"/><rect x="2.4" y="2.4" width="2.4" height="2.4" rx=".6"/></g><g class="chev c3" transform="translate(0 13.6)"><rect width="2.4" height="2.4" rx=".6"/><rect x="4.8" width="2.4" height="2.4" rx=".6"/><rect x="2.4" y="2.4" width="2.4" height="2.4" rx=".6"/></g></svg>
+          </div>
+        </div>
 
-  <!-- 03 STATS + TOOLKIT (checkerboard, 5 columns on the page grid) -->
-  <section class="lime stats">
-    <div class="board" id="board"></div>
-    <p class="also mono">ALSO IN MY TOOLKIT <span id="alsoTools"></span></p>
-  </section>
-
-  <!-- 04 SELECTED WORK (horizontal) -->
-  <section class="lime work" id="work">
-    <div class="work-pin">
-      <div class="work-track" id="workTrack">
-      <svg class="wires" id="wires" aria-hidden="true"></svg>
-      <div class="work-head">
-        <span class="chip-cut mono">KEEP SCROLLING</span>
-        <h2 class="section-title">SELECTED<br>WORK</h2>
-        <p>Thanks for sticking around this far. Click a card for the full case study.</p>
-        <a class="explore" href="https://github.com/pedacitodecielo-lab" target="_blank" rel="noopener">EXPLORE MORE</a>
+        <!-- statement, scrambled in while the hero is pinned -->
+        <div class="extent">
+          <p class="ex-para" data-scramble-in>I hold myself to high standards &amp; keep improving. I stay humble, listen first, &amp; do my best work as part of a team</p>
+          <p class="ex-word ex-w1" data-scramble-in>“Available</p>
+          <p class="ex-word ex-w2" data-scramble-in>now,</p>
+          <p class="ex-word ex-w3" data-scramble-in>ready to start”</p>
+          <div class="ex-arrow-mask"><svg class="ex-arrow" viewBox="0 0 41 41" fill="currentColor" shape-rendering="crispEdges" aria-hidden="true"><rect y="17.34" width="6.31" height="6.31"/><rect x="8.67" y="17.34" width="6.31" height="6.31"/><rect x="17.34" y="17.34" width="6.31" height="6.31"/><rect x="26.01" y="17.34" width="6.31" height="6.31"/><rect x="34.69" y="17.34" width="6.31" height="6.31"/><rect x="22.07" width="6.31" height="6.31"/><rect x="28.38" y="8.67" width="6.31" height="6.31"/><rect x="28.38" y="26.01" width="6.31" height="6.31"/><rect x="22.07" y="34.69" width="6.31" height="6.31"/></svg></div>
+        </div>
       </div>
+
+      <!-- stats: tiles open one by one once the pixels have flooded the screen -->
+      <div class="stats" data-surface="green">
+        <div class="grid6" aria-hidden="true"><i></i><i class="fade"></i><i class="fade"></i><i class="fade"></i><i class="fade"></i><i></i></div>
+        <i class="notch s1" aria-hidden="true"></i><i class="notch s2" aria-hidden="true"></i>
+        <div class="stat-canvas" id="statCanvas"></div>
       </div>
+
+      <!-- selected work: slides in from the right, then travels horizontally -->
+      <div class="work" id="work" data-surface="green">
+        <div class="sw-heading">
+          <div class="sw-top">
+            <span class="sw-badge" data-scramble-in>KEEP SCROLLING</span>
+            <h2 class="sw-title" data-scramble-in>SELECTED<br>WORK</h2>
+          </div>
+          <p class="sw-desc" data-scramble-in>Thanks for sticking around this far. Click a card for the full case study.</p>
+        </div>
+        <div class="sw-cta-wrap"><a class="nbtn on-green sw-cta" href="https://github.com/pedacitodecielo-lab" target="_blank" rel="noopener"><span class="nbtn-label">EXPLORE MORE</span></a></div>
+        <div class="work-viewport">
+          <svg class="work-paths" id="workPaths" aria-hidden="true"></svg>
+          <div class="work-track" id="workTrack"></div>
+        </div>
+        <canvas class="work-gl" id="workGL" aria-hidden="true"></canvas>
+      </div>
+
     </div>
   </section>
 
-  <div class="pixels to-dark" data-pixels aria-hidden="true"></div>
-
-  <!-- 05 EXPERIENCE -->
-  <section class="experience" id="experience">
-    <span class="chip mono">I'VE</span>
-    <h2 class="section-title center">WORKED AT</h2>
-    <div class="xp">
-      <ol class="xp-list" id="xpList"></ol>
-      <div class="xp-panel" id="xpPanel" aria-live="polite"></div>
+  <!-- 04 EXPERIENCE -->
+  <section class="xp" id="experience" data-surface="dark">
+    <div class="grid6 grad" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="xp-heading">
+      <span class="xp-badge">I'VE BEEN</span>
+      <h2 class="xp-title" data-scramble>WORKED AT</h2>
+    </div>
+    <div class="xp-body">
+      <div class="xp-col xp-col--left" id="xpLeft"></div>
+      <div class="xp-crt">
+        <canvas id="xpCRT" aria-hidden="true"></canvas>
+        <i class="rule t"></i><i class="rule b"></i><i class="rule l"></i><i class="rule r"></i>
+        <svg class="plus tl" viewBox="0 0 8 8"><path d="M4.5 3.5H7V4.5H4.5V7H3.5V4.5H1V3.5H3.5V1H4.5V3.5Z"/></svg>
+        <svg class="plus tr" viewBox="0 0 8 8"><path d="M4.5 3.5H7V4.5H4.5V7H3.5V4.5H1V3.5H3.5V1H4.5V3.5Z"/></svg>
+        <svg class="plus br" viewBox="0 0 8 8"><path d="M4.5 3.5H7V4.5H4.5V7H3.5V4.5H1V3.5H3.5V1H4.5V3.5Z"/></svg>
+        <svg class="plus bl" viewBox="0 0 8 8"><path d="M4.5 3.5H7V4.5H4.5V7H3.5V4.5H1V3.5H3.5V1H4.5V3.5Z"/></svg>
+      </div>
+      <div class="xp-col xp-col--right" id="xpRight"></div>
+      <div class="xp-desc" id="xpDesc" aria-live="polite"></div>
     </div>
   </section>
 
-  <!-- 06 CREDENTIALS -->
-  <section class="credentials" id="credentials">
-    <h2 class="section-title">CREDENTIALS</h2>
-    <ul class="certs" id="certs"></ul>
+  <!-- 05 CREDENTIALS -->
+  <section class="creds" id="credentials" data-surface="dark">
+    <div class="grid6 grad" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="xp-heading">
+      <span class="xp-badge">CERTIFIED IN</span>
+      <h2 class="xp-title" data-scramble>CREDENTIALS</h2>
+    </div>
+    <ul class="cert-list" id="certs"></ul>
   </section>
+
+  <!-- 06 CONTACT: docked under the page and revealed as it scrolls away -->
+  <div class="footer-dock">
+    <footer class="site-footer" id="contact" data-surface="green">
+      <div class="footer-top">
+        <div class="footer-cta">
+          <h2 class="footer-headline" data-scramble>LET'S TURN DATA INTO DECISIONS</h2>
+          <div class="footer-buttons">
+            <a class="nbtn on-green footer-button" href="mailto:emelioexaudi@gmail.com"><span class="nbtn-label">SHOOT A MESSAGE</span></a>
+            <a class="nbtn on-green footer-button" href="https://framerusercontent.com/assets/147DXCGfv86VcyDUHwmPobr3no4.pdf" target="_blank" rel="noopener"><span class="nbtn-label">DOWNLOAD CV</span><svg class="dl" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 1V17M6 11L12 17L18 11M2 22H22" stroke="currentColor" stroke-width="1.66"/></svg></a>
+          </div>
+        </div>
+        <div class="footer-social">
+          <div class="footer-links">
+            <span class="fl-k footer-reveal">WORK</span>
+            <a class="footer-reveal" href="https://github.com/pedacitodecielo-lab" target="_blank" rel="noopener"><span data-glitch>GITHUB</span> ↗</a>
+            <a class="footer-reveal" href="https://public.tableau.com/app/profile/emelio.exaudi" target="_blank" rel="noopener"><span data-glitch>TABLEAU</span> ↗</a>
+            <span class="fl-k footer-reveal">SOCIAL</span>
+            <a class="footer-reveal" href="https://www.linkedin.com/in/emelio-exaudi" target="_blank" rel="noopener"><span data-glitch>LINKEDIN</span> ↗</a>
+            <a class="footer-reveal" href="https://open.spotify.com/user/21xx54fhyxwllmnkvf6cjgzui" target="_blank" rel="noopener"><span data-glitch>SPOTIFY</span> ↗</a>
+            <span class="fl-k footer-reveal">ME</span>
+            <a class="footer-reveal" href="hobbies.html"><span data-glitch>HOBBIES</span> →</a>
+            <a class="footer-reveal" href="geotech-demo.html"><span data-glitch>LIVE DEMO</span> →</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bigtext-box">
+        <div class="dot-trail footer-bigtext"><span class="dot-trail-text">PORTFOLIO/EXAUDI</span><canvas class="dot-trail-canvas" aria-hidden="true"></canvas></div>
+      </div>
+    </footer>
+  </div>
 
 </main>
 
-<!-- 07 CONTACT -->
-<footer class="lime contact" id="contact">
-  <div class="contact-top">
-    <div>
-      <h2 class="contact-title">LET'S TURN<br>DATA INTO<br>DECISIONS</h2>
-      <div class="btns">
-        <a class="btn" href="mailto:emelioexaudi@gmail.com">SHOOT A MESSAGE ↗</a>
-        <a class="btn" href="https://framerusercontent.com/assets/147DXCGfv86VcyDUHwmPobr3no4.pdf" target="_blank" rel="noopener">DOWNLOAD CV ↓</a>
-      </div>
-    </div>
-    <dl class="links mono">
-      <dt>WORK</dt><dd><a href="https://github.com/pedacitodecielo-lab" target="_blank" rel="noopener">GITHUB ↗</a><a href="https://public.tableau.com/app/profile/emelio.exaudi" target="_blank" rel="noopener">TABLEAU ↗</a></dd>
-      <dt>SOCIAL</dt><dd><a href="https://www.linkedin.com/in/emelio-exaudi" target="_blank" rel="noopener">LINKEDIN ↗</a><a href="https://open.spotify.com/user/21xx54fhyxwllmnkvf6cjgzui" target="_blank" rel="noopener">SPOTIFY ↗</a></dd>
-      <dt>ME</dt><dd><a href="hobbies.html">HOBBIES →</a><a href="geotech-demo.html">LIVE DEMO →</a></dd>
-    </dl>
-  </div>
-  <p class="mega" aria-hidden="true">PORTFOLIO/EXAUDI</p>
-  <p class="copy mono">© 2026 EMELIO JOSHIA EXAUDI LUMBAN GAOL</p>
-</footer>
-
 <!-- project modal -->
 <dialog class="modal" id="modal" aria-labelledby="mTitle">
-  <button class="modal-close mono" aria-label="Close">CLOSE ✕</button>
+  <button class="modal-close" aria-label="Close">CLOSE ✕</button>
   <div class="modal-body">
-    <span class="chip mono" id="mCat"></span>
+    <span class="sw-badge" id="mCat"></span>
     <h3 id="mTitle"></h3>
     <p class="m-sum" id="mSum"></p>
     <div class="slider">
@@ -140,12 +210,16 @@
       <div class="slides" id="mSlides"></div>
       <button class="sl-next" aria-label="Next image">›</button>
     </div>
-    <dl class="m-meta mono" id="mMeta"></dl>
+    <dl class="m-meta" id="mMeta"></dl>
     <div class="m-content" id="mContent"></div>
   </div>
 </dialog>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
 <script src="data.js"></script>
+<script src="gl.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
