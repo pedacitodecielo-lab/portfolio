@@ -136,9 +136,10 @@ html:not([data-preload]) .preloader{display:none}
 .nbtn-corners svg:nth-child(4){left:0;bottom:0}
 
 /* ---------- pinned stage ---------- */
-.stage{position:relative;z-index:2}
-.stage-view{position:relative;height:100vh;height:100dvh;overflow:hidden}
-.hero,.stats,.work{position:absolute;inset:0}
+.stage,.stage .pin-spacer{position:relative;z-index:2;pointer-events:none}
+/* the pinned frame stays on top of Experience after it finishes, so only its visible layers may take clicks */
+.stage-view{position:relative;height:100vh;height:100dvh;overflow:hidden;pointer-events:none}
+.hero,.stats,.work{position:absolute;inset:0;pointer-events:auto}
 .hero{background:#000;z-index:1}
 .stats{z-index:2;background:var(--green);--line:var(--green-line);visibility:hidden}
 .work{z-index:3;background:var(--green);--line:var(--green-line);visibility:hidden}
