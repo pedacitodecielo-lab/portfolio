@@ -4,14 +4,12 @@
   const F = "https://framerusercontent.com/images/";
 
   // ---------- content that is not in the CMS export ----------
+  // tools: [name, local logo]; the first five are also tiles on the board
   const TOOLS = [
-    ["Python", "rzBFBCNitFvJNorIkQkv8OS1Wug.svg"], ["SQL", "Dhj0nhkTh6NFi7AWTn8UeOa7jzY.svg"], ["NoSQL", "66e0UQGlN6Vp9WShjocSW87Qk.svg"],
-    ["MATLAB", "bic3oUZ1iSOtWXYg74HOhNGpBZE.svg"], ["Linux", "uaADmPMq0dq1lvXbWFX1eSEkZ4.svg"], ["Bash", "3lBr2QxEZzMdAsQtK6Pjul870V8.svg"],
-    ["Excel", "jKXuNgG3KGNqe8Ra4iXVEEGXy4k.png"], ["Word", "E9yz3DxT8eXOE1yqev7OjqREs.svg"], ["PowerPoint", "XkYC7xTOVHDr0gYyIGVIWBp9j4.svg"],
-    ["Power BI", "fHsMjTUYUIEAwVRNd8VsSCrPzs.png"], ["Tableau", "UxB5UcADzG9OXTkfsB1AHdbD3HA.svg"], ["QGIS", "Tb0fDNuPy7SRc8FlNZCesYT9ko.png"],
-    ["Google Earth Engine", "Dpjh0Pcz2sW6xmJFJ4JTozMkOc.png"], ["WRF", "5jd5asBuxFaiEnL7etWQoCIa4.png"], ["WRF-Hydro", "Q9jnD0B70y4ekMOljj7sMTyX9IU.png"],
-    ["HTML5", "QUMZjLBEaefCugbhkaTAFcprOWQ.svg"], ["CSS3", "CPCoZIHh5IhKplr3oPeQOTLRy4A.svg"], ["JavaScript", "3YUFaml8g79aRw4dzohAaJUHOE.svg"],
-    ["Figma", "ndJdbHWUXq09pSz8dDyf9tbZjg.svg"],
+    ["Python", "python.svg"], ["SQL", "sql.svg"], ["Power BI", "powerbi.png"], ["Tableau", "tableau.svg"], ["Excel", "excel.png"],
+    ["NoSQL", "nosql.svg"], ["MATLAB", "matlab.svg"], ["Linux", "linux.svg"], ["Bash", "bash.svg"], ["Word", "word.svg"],
+    ["PowerPoint", "powerpoint.svg"], ["QGIS", "qgis.png"], ["Google Earth Engine", "gee.png"], ["WRF", "wrf.png"], ["WRF-Hydro", "wrfhydro.png"],
+    ["HTML5", "html5.svg"], ["CSS3", "css3.svg"], ["JavaScript", "javascript.svg"], ["Figma", "figma.svg"],
   ];
   const XP = [
     { org: "PT Aneka Tambang Tbk. (ANTAM)", role: "Environmental Analyst Intern", when: "Jan 2026 – Feb 2026", logo: F + "33OEzNGbCg48GHmDeqwWP6ScozY.png",
@@ -86,22 +84,58 @@
   });
 
   // ---------- stats + tools ----------
-  $("#tools").innerHTML = TOOLS.map(([n, f]) => `<li><img src="${F + f}" alt="" loading="lazy"><span>${n}</span></li>`).join("");
+  const stat = (k, v, count) => `<span class="tile-k">${k}</span><span class="tile-v"${count ? ` data-count="${v}"` : ""}>${count ? 0 : v}</span>`;
+  const tool = ([n, f]) => `<span class="tile-k">${n.toUpperCase()}</span><span class="dots" style="--logo:url('assets/tools/${f}')" role="img" aria-label="${n} logo"></span>`;
+  // [column, row, html] on a 5-column checkerboard; null = pixel chart decoration
+  const BOARD = [
+    [1, 1, stat("PROJECTS SHIPPED", 13, 1)], [3, 1, tool(TOOLS[0])], [5, 1, tool(TOOLS[1])],
+    [2, 2, stat("CERTIFICATIONS", 7, 1)], [4, 2, tool(TOOLS[2])],
+    [1, 3, null], [3, 3, stat("INTERNSHIPS", 2, 1)], [5, 3, tool(TOOLS[3])],
+    [2, 4, tool(TOOLS[4])], [4, 4, stat("DEAN'S LIST SEM 7", "4.00")],
+  ];
+  $("#board").innerHTML = BOARD.map(([c, r, html]) => html
+    ? `<div class="tile" style="grid-column:${c};grid-row:${r}">${html}</div>`
+    : `<div class="pixel-chart" style="grid-column:${c};grid-row:${r}" aria-hidden="true">${"<i></i>".repeat(9 * 12)}</div>`).join("");
+  $("#alsoTools").textContent = TOOLS.slice(5).map((t) => t[0]).join(" · ");
+  // decorative pixel bar chart that wobbles like live data
+  const px = [...document.querySelectorAll(".pixel-chart i")];
+  const bars = Array.from({ length: 9 }, () => 3 + Math.floor(Math.random() * 9));
+  const drawBars = () => px.forEach((cell, k) => cell.classList.toggle("on", 11 - Math.floor(k / 9) < bars[k % 9]));
+  drawBars();
+  if (!reduce) setInterval(() => { bars.forEach((v, i) => { bars[i] = Math.max(1, Math.min(12, v + Math.round(Math.random() * 4 - 2))); }); drawBars(); }, 700);
 
   // ---------- work cards ----------
   const track = $("#workTrack");
-  track.insertAdjacentHTML("beforeend", PROJECTS.map((p, i) => `
-    <button class="card" data-i="${i}">
-      <div class="card-img"><img src="${p.cover}?scale-down-to=1024" alt="" loading="lazy"><span class="card-tag">${(p.category || "").toUpperCase()}</span></div>
-      <div class="card-title">${p.title}</div>
-      <div class="card-foot"><span>${p.client || ""}</span><span>VIEW ↗</span></div>
-    </button>`).join(""));
+  // width and vertical offset cycle so the cards zig-zag like a circuit board
+  const LAYOUT = [["34vw", "-20vh"], ["30vw", "22vh"], ["24vw", "-6vh"], ["28vw", "24vh"], ["32vw", "-16vh"], ["24vw", "14vh"]];
+  track.insertAdjacentHTML("beforeend", PROJECTS.map((p, i) => {
+    const [w, y] = LAYOUT[i % LAYOUT.length];
+    const tag = (p.category || "").split("·").pop().trim().toUpperCase();
+    return `<button class="card" data-i="${i}" style="--w:${w};--y:${y}">
+      <div class="card-frame"><div class="card-img"><img src="${p.cover}?scale-down-to=1024" alt="" loading="lazy"><span class="card-tag">${tag}</span></div></div>
+      <div class="card-foot"><span class="card-title">${p.title}</span><span class="visit">VIEW ↗</span></div>
+    </button>`;
+  }).join(""));
+  // wires: horizontal, a 45° jog, horizontal again, between neighbouring cards
+  const wires = $("#wires");
+  const drawWires = () => {
+    if (innerWidth <= 860) return;
+    const base = track.getBoundingClientRect();
+    const pts = [...track.querySelectorAll(".card-frame")].map((f) => { const r = f.getBoundingClientRect(); return { l: r.left - base.left, r: r.right - base.left, y: r.top - base.top + r.height / 2 }; });
+    let d = `M${pts[0].l - 70} ${pts[0].y}H${pts[0].l - 8}`;
+    for (let k = 0; k < pts.length - 1; k++) {
+      const a = pts[k], b = pts[k + 1], mid = (a.r + b.l) / 2, half = Math.min(Math.abs(b.y - a.y), b.l - a.r - 30) / 2;
+      d += `M${a.r + 8} ${a.y}H${mid - half}L${mid + half} ${b.y}H${b.l - 8}`;
+    }
+    wires.innerHTML = `<path d="${d}"/>`;
+  };
   const workSec = $(".work");
   const sizeWork = () => {
     if (innerWidth <= 860) { workSec.style.removeProperty("--work-h"); return; }
     workSec.style.setProperty("--work-h", track.scrollWidth - innerWidth + innerHeight * 1.2 + "px");
   };
-  addEventListener("resize", sizeWork); addEventListener("load", sizeWork); sizeWork();
+  const layoutWork = () => { sizeWork(); drawWires(); };
+  addEventListener("resize", layoutWork); addEventListener("load", layoutWork); layoutWork();
 
   // ---------- project modal ----------
   const modal = $("#modal"), slides = $("#mSlides");
@@ -142,7 +176,7 @@
   $("#certs").innerHTML = CERTS.map((c) => `<li><a href="${c.pdf || c.image}" target="_blank" rel="noopener"><img src="${c.logo}" alt="" loading="lazy"><span><b>${c.title}</b><span>${c.issuer} · ${new Date(c.date).toLocaleDateString("en-GB", { month: "short", year: "numeric" })}</span></span></a></li>`).join("");
 
   // ---------- reveal + counters ----------
-  document.querySelectorAll(".tile, .tools li, .xp, .certs li, .contact-top").forEach((el) => el.setAttribute("data-reveal", ""));
+  document.querySelectorAll(".tile, .xp, .certs li, .contact-top").forEach((el) => el.setAttribute("data-reveal", ""));
   const io = new IntersectionObserver((entries) => entries.forEach((en) => {
     if (!en.isIntersecting) return;
     en.target.classList.add("in");

@@ -20,7 +20,7 @@
 </div>
 
 <!-- background grid + fixed HUD -->
-<div class="grid-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+<div class="grid-lines" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
 
 <header class="hud">
   <a class="hud-brand" href="#top"><span class="tri">▲</span> EMELIO EXAUDI</a>
@@ -67,26 +67,22 @@
   <!-- pixel transition black -> lime -->
   <div class="pixels to-lime" data-pixels aria-hidden="true"></div>
 
-  <!-- 03 STATS + TOOLKIT -->
+  <!-- 03 STATS + TOOLKIT (checkerboard, 5 columns on the page grid) -->
   <section class="lime stats">
-    <div class="stat-grid">
-      <div class="tile"><span class="tile-k mono">PROJECTS SHIPPED</span><span class="tile-v" data-count="13">0</span></div>
-      <div class="tile"><span class="tile-k mono">CERTIFICATIONS</span><span class="tile-v" data-count="7">0</span></div>
-      <div class="tile"><span class="tile-k mono">INTERNSHIPS</span><span class="tile-v" data-count="2">0</span></div>
-      <div class="tile"><span class="tile-k mono">DEAN'S LIST SEM 7</span><span class="tile-v">4.00</span></div>
-    </div>
-    <p class="eyebrow mono">TOOLKIT</p>
-    <ul class="tools" id="tools"></ul>
+    <div class="board" id="board"></div>
+    <p class="also mono">ALSO IN MY TOOLKIT <span id="alsoTools"></span></p>
   </section>
 
   <!-- 04 SELECTED WORK (horizontal) -->
   <section class="lime work" id="work">
     <div class="work-pin">
       <div class="work-track" id="workTrack">
+      <svg class="wires" id="wires" aria-hidden="true"></svg>
       <div class="work-head">
-        <span class="chip mono">KEEP SCROLLING</span>
+        <span class="chip-cut mono">KEEP SCROLLING</span>
         <h2 class="section-title">SELECTED<br>WORK</h2>
-        <p>Click any card to open the case study.</p>
+        <p>Thanks for sticking around this far. Click a card for the full case study.</p>
+        <a class="explore" href="https://github.com/pedacitodecielo-lab" target="_blank" rel="noopener">EXPLORE MORE</a>
       </div>
       </div>
     </div>
