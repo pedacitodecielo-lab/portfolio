@@ -261,7 +261,7 @@
 
   // experience
   const half = Math.ceil(XP.length / 2);
-  const rowHTML = (x, i) => `<div class="xp-row" data-i="${i}"><button class="xp-row-btn"><span class="xp-row-bg"></span><span class="xp-row-n">${String(i + 1).padStart(2, "0")}</span><span class="xp-row-text"><span class="xp-row-title">${x.org}</span><span class="xp-row-role">${x.role}</span></span></button><div class="xp-row-panel"><div><p>${x.when} · ${x.text}</p></div></div></div>`;
+  const rowHTML = (x, i) => `<div class="xp-row" data-i="${i}"><button class="xp-row-btn"><span class="xp-row-bg"></span><span class="xp-row-n">${String(i + 1).padStart(2, "0")}</span><span class="xp-row-text"><span class="xp-row-title">${x.org}</span><span class="xp-row-role">${x.role}</span></span><span class="xp-row-mark" aria-hidden="true"></span></button><div class="xp-row-panel"><div><p>${x.when} · ${x.text}</p></div></div></div>`;
   $("#xpLeft").innerHTML = XP.slice(0, half).map((x, i) => rowHTML(x, i)).join("");
   $("#xpRight").innerHTML = XP.slice(half).map((x, i) => rowHTML(x, i + half)).join("");
 
@@ -510,14 +510,29 @@
       view._st = st;
       return () => { xp.style.marginTop = ""; setXpShift(0); st.kill(); gsap.set([stats, work, track, paths, swHeading, swCta], { clearProps: "transform" }); stats.style.clipPath = work.style.clipPath = ""; };
     }
+    // same hero timeline as desktop; the stats section is tucked under the hero's last frame
+    // and pulled up to the top while green cells flood in, then simply scrolls on
     measureLine3(); measureArrow();
+    const tuck = () => (stats.style.marginTop = `-${hero.offsetHeight}px`);
+    tuck();
+    let lastKey = "";
     const st = ScrollTrigger.create({
-      trigger: hero, start: "top top", end: "+=250%", pin: true,
-      onUpdate: (self) => { const p = self.progress, q = p < 0.3 ? (p / 0.3) * 0.2222 : 0.2222 + ((p - 0.3) / 0.7) * 0.45; heroExit(Math.min(1, q / 0.2222)); statement(q); },
+      trigger: hero, start: "top top", end: () => "+=" + 4.5 * innerHeight, pin: true, invalidateOnRefresh: true, onRefreshInit: tuck,
+      onUpdate: (self) => {
+        const p1 = self.progress, vw = innerWidth, vh = innerHeight;
+        heroExit(Math.min(1, p1 / 0.2222));
+        statement(p1);
+        const R = p1 <= 2 / 3 ? 0 : (p1 - 2 / 3) * 3;
+        if (R >= 0.5) playStats();
+        stats.style.visibility = R > 0 ? "" : "hidden";
+        stats.style.transform = R > 0 && R < 1 ? `translate3d(0,${-Math.max(0, self.end - self.scroll())}px,0)` : "";
+        const key = R > 0 && R < 0.99 ? `${R.toFixed(3)}|${vw}x${vh}` : String(R >= 0.99);
+        if (key !== lastKey) { lastKey = key; stats.style.clipPath = R > 0 && R < 0.99 ? cellClip(R, vw, vh) : ""; }
+      },
     });
-    playOnView(stats, playStats, 0.2);
+    stats.style.visibility = "hidden";
     playOnView(work, () => headTl.play(0), 0.1);
-    return () => st.kill();
+    return () => { st.kill(); stats.style.marginTop = stats.style.transform = stats.style.clipPath = stats.style.visibility = ""; };
   });
   if (reduce) { statsTl.progress(1); headTl.progress(1); }
 
@@ -553,7 +568,7 @@
   }
   xpRows.forEach((r) => {
     const btn = $(".xp-row-btn", r), bg = $(".xp-row-bg", r);
-    btn.addEventListener("click", () => selectXp(+r.dataset.i));
+    btn.addEventListener("click", () => (innerWidth < 768 && r.dataset.selected === "true" ? (r.dataset.selected = "false") : selectXp(+r.dataset.i)));
     btn.addEventListener("mouseenter", () => { gsap.killTweensOf(bg); gsap.timeline({ delay: 0.18 }).to(bg, { opacity: 0.15, duration: 0.07 }).to(bg, { opacity: 1, duration: 0.07 }).to(bg, { opacity: 0.15, duration: 0.07 }).to(bg, { opacity: 1, duration: 0.07 }); });
     btn.addEventListener("mouseleave", () => { gsap.killTweensOf(bg); gsap.set(bg, { opacity: 1 }); });
   });

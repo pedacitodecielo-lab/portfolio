@@ -277,7 +277,11 @@ html:not([data-preload]) .preloader{display:none}
 .xp-row-bg::after{content:"";position:absolute;inset:1px;background:var(--bg0);clip-path:var(--shape);transition:background-color .2s ease-out}
 .xp-row-btn:hover .xp-row-bg::after{background:var(--green)}
 .xp-row[data-selected="true"] .xp-row-bg::after{background:#f5f0eb}
-.xp-row-n,.xp-row-text{position:relative;z-index:1}
+.xp-row-n,.xp-row-text,.xp-row-mark{position:relative;z-index:1}
+.xp-row-mark{display:none;flex:none;font-family:var(--mono);font-size:1rem;line-height:1;color:var(--green);transition:color .3s}
+.xp-row-mark::before{content:"+"}
+.xp-row[data-selected="true"] .xp-row-mark::before{content:"−"}
+.xp-row-btn:hover .xp-row-mark,.xp-row[data-selected="true"] .xp-row-mark{color:var(--black)}
 .xp-row-n{flex:none;width:2.25rem;padding-right:.75rem;text-align:right;font-family:var(--display);font-weight:600;font-size:.75rem;letter-spacing:.0975rem;color:var(--grey)}
 .xp-row-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:.375rem}
 .xp-row-title{font-family:var(--display);font-weight:500;font-size:1.05rem;line-height:1.05;text-transform:uppercase;transition:color .3s}
@@ -364,6 +368,7 @@ main{position:relative;z-index:0}
   .stage-view{height:auto;overflow:visible}
   .hero{position:relative;height:100vh;height:100svh}
   .stats,.work{position:relative;visibility:visible}
+  .stats{z-index:3;min-height:100vh;min-height:100svh}
   .stats{padding:3rem var(--edge)}
   .stat-canvas{position:relative;top:auto;display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .stat-box,.stat-mark{position:relative;left:auto!important;top:auto!important;width:auto;height:auto;aspect-ratio:1.22}
@@ -408,6 +413,7 @@ main{position:relative;z-index:0}
   .xp-body{grid-template-columns:1fr;grid-template-areas:"left" "right";gap:.5625rem}
   .xp-crt,.xp-desc{display:none}
   .xp-col{display:contents}
+  .xp-row-mark{display:block}
   .xp-row[data-selected="true"] .xp-row-panel{grid-template-rows:1fr}
   .xp-row[data-selected="true"] .xp-row-panel>div{border:1px solid var(--stroke2);border-top:0}
   .footer-top{flex-direction:column}
