@@ -40,6 +40,9 @@
   const SLOTS = [[0, 412, W_LG], [451, 15, W_LG], [712, 505, W_SM], [1066, 168, W_SM], [1492, 301, W_LG], [1974, 83, W_SM], [2321, 416, W_LG],
     [2686, 0, W_LG], [3148, 509, W_SM], [3520, 140, W_LG], [3990, 470, W_SM], [4370, 60, W_SM], [4740, 360, W_LG]];
   const BOX_X = 372, BOX_H = 800;
+  // more projects than slots: repeat the zig-zag further to the right instead of stacking on the first cards
+  const PERIOD = SLOTS[SLOTS.length - 1][0] + W_LG + 360;
+  const slot = (i) => { const [x, y, w] = SLOTS[i % SLOTS.length]; return [x + Math.floor(i / SLOTS.length) * PERIOD, y, w]; };
   const tagOf = (p) => (p.category || "").split("·").pop().trim();
   const tagColor = (t) => /audit|financ|business|risk/i.test(t) ? "var(--orange)" : /scrap|analysis/i.test(t) ? "var(--green)" : /engineer|iot|instrument/i.test(t) ? "var(--purple-vivid)" : "var(--cyan)";
 
@@ -225,11 +228,11 @@
 
   // work cards
   const track = $("#workTrack"), paths = $("#workPaths"), work = $("#work");
-  const boxW = SLOTS[SLOTS.length - 1][0] + SLOTS[SLOTS.length - 1][2] + 40;
+  const boxW = Math.max(...PROJECTS.map((_, i) => slot(i)[0] + slot(i)[2])) + 40;
   [track, paths].forEach((el) => { el.style.setProperty("--box-w", boxW); el.style.setProperty("--box-h", BOX_H); el.style.setProperty("--box-x", BOX_X); });
   const plus = (c) => `<svg class="plus8 ${c}" viewBox="0 0 8 8"><path d="M4.5 3.5H7V4.5H4.5V7H3.5V4.5H1V3.5H3.5V1H4.5V3.5Z"/></svg>`;
   track.innerHTML = PROJECTS.map((p, i) => {
-    const [x, y, w] = SLOTS[i % SLOTS.length], tag = tagOf(p), cover = i % 3 === 0 ? "#64ffc1" : "#64e8ff";
+    const [x, y, w] = slot(i), tag = tagOf(p), cover = i % 3 === 0 ? "#64ffc1" : "#64e8ff";
     return `<div class="work-card" style="--x:${x};--y:${y};--w:${w}">
       <button class="work-thumb" data-i="${i}" style="--ratio:${CARD_RATIO}" aria-label="Open ${p.title.replace(/"/g, "")}">
         <span class="work-mask" data-cover="${cover}"><img class="work-img" src="${p.cover}?scale-down-to=1024" alt="" loading="lazy"><span class="work-cover" style="--cover:${cover}"></span></span>
@@ -240,7 +243,7 @@
   }).join("");
   // circuit path behind the cards: centre to centre, horizontal → angled → horizontal
   function drawPaths() {
-    const pts = PROJECTS.map((_, i) => { const [x, y, w] = SLOTS[i % SLOTS.length]; return [x + w / 2, y + w / CARD_RATIO / 2]; });
+    const pts = PROJECTS.map((_, i) => { const [x, y, w] = slot(i); return [x + w / 2, y + w / CARD_RATIO / 2]; });
     const start = [-170, pts[0][1]];
     let d = `M${start[0]} ${start[1]}H${pts[0][0]}`;
     for (let i = 0; i < pts.length - 1; i++) {
