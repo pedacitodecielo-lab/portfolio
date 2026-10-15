@@ -362,6 +362,7 @@ main{position:relative;z-index:0}
 .m-content{line-height:1.7;color:var(--grey-2);max-width:72ch}
 .m-content h2,.m-content h3{font-family:var(--display);color:var(--white);text-transform:uppercase;line-height:1}
 .m-content img{margin:1rem 0}
+.m-content video{display:block;width:100%;margin:1rem 0}
 
 /* ---------- tablet / mobile: no pinned stage beyond the hero ---------- */
 @media (max-width:1024.98px),(prefers-reduced-motion:reduce){

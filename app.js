@@ -593,10 +593,12 @@
     if (p.link) meta.push(["LINK", `<a href="${p.link}" target="_blank" rel="noopener">Open ↗</a>`]);
     $("#mMeta").innerHTML = meta.filter((m) => m[1]).map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
     $("#mContent").innerHTML = p.content; // own CMS content, not user input
+    // CMS videos have no autoplay/controls attributes, so start them muted with controls
+    $("#mContent").querySelectorAll("video").forEach((v) => { v.muted = true; v.controls = true; v.play().catch(() => {}); });
     lenis && lenis.stop();
     modal.showModal();
   });
-  modal.addEventListener("close", () => lenis && lenis.start());
+  modal.addEventListener("close", () => { $("#mContent").querySelectorAll("video").forEach((v) => v.pause()); lenis && lenis.start(); });
   $(".modal-close").onclick = () => modal.close();
   modal.addEventListener("click", (e) => { if (e.target === modal) modal.close(); });
   $(".sl-prev").onclick = () => slides.scrollBy({ left: -slides.clientWidth, behavior: "smooth" });
